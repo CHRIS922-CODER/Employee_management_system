@@ -1,0 +1,46 @@
+{% extends 'employee/dashboard.html' %} 
+
+{% block item_body %}
+
+ {% block item_title %} Recent Leave Requests {% endblock %}
+ 
+ 
+ {% block table %}
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Employee</th>
+      <th>Start Date</th>
+      <th>End Date</th>
+      <th>Status</th>
+      <th>Notes</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for request in leave_requests %}
+    <tr>
+      <td>{{ request.user.username }}</td>
+      <td>{{ request.start_date }}</td>
+      <td>{{ request.end_date }}</td>
+      <td>{{ request.status }}</td>
+      <td>{{ request.notes }}</td>
+      <td>
+        {% if request.status == 'approved' %}
+        <a class="btn btn-secondary">Approved</a>
+        {% else %}
+        <a href="{% url 'edit_leave_request' request.id %}" class="btn btn-primary">Edit</a>
+        <a href="{% url 'delete_leave_request' request.id %}" class="btn btn-danger">Delete</a>
+        {% endif %}
+      </td>
+
+      {% empty %}
+      <td colspan="6">No records found</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %} 
+
+
+{% endblock %}

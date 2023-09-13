@@ -1,0 +1,63 @@
+{% extends 'employee/dashboard_test.html' %} {% block content1 %}
+<div class="m-4" style="float: left">
+  <form method="post" action="{% url 'report_time' %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">
+      {% if is_clocked_in %}Clock Out{% else %}Clock In{% endif %}
+    </button>
+  </form>
+</div>
+
+<div class="card m-4">
+  <div class="card-header">
+    <i class="fas fa-table me-1"></i>
+    Records
+  </div>
+  <div class="card-body">
+    <div class="container">
+      <h2 class="mb-2">Employee Attendance List</h2>
+      <div class="table-container">
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Clock In</th>
+                <th>Clock Out</th>
+                <th>Approved By</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for record in time_records %}
+              <tr>
+                <td>{{ record.record_date }}</td>
+                <td>{{ record.clock_in }}</td>
+                <td>{{ record.clock_out}}</td>
+                <td>
+                  {% if record.approved_by %} {{ record.approved_by.username }}
+                  {% else %} Not Approved {% endif %}
+                </td>
+                <td>
+                  {% if  record.is_clock_out %}
+                  <a
+                    href="{% url 'clock_out' pk=record.pk %}"
+                    class="btn btn-danger btn-sm"
+                    >Clock_out</a
+                  >
+                  {% else %}
+                  <a class="btn btn-danger btn-sm" >C...</a>
+                  {% endif %}
+                </td>
+              </tr>
+              {% empty %}
+              <td colspan="5">No records found</td>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

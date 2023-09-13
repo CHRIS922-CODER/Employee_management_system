@@ -1,0 +1,35 @@
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+from .models import Employee
+
+def generate_pdf_report(request, user_id):
+    # Retrieve the employee using the provided ID
+    employee = get_object_or_404(Employee, user=user_id)
+
+    # Create a PDF response
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="employee_report_{employee.employee_id}.pdf"'
+
+    # Create the PDF document
+    p = canvas.Canvas(response, pagesize=letter)
+
+    # Set up the PDF document and fonts (customize as needed)
+    p.setFont("Helvetica", 12)
+
+    # Add content to the PDF (employee details)
+    p.drawString(100, 750, f'Employee Name: {employee.user.username}')
+    p.drawString(100, 730, f'Email: {employee.email}')
+    p.drawString(100, 710, f'Contact: {employee.contact}')
+    p.drawString(100, 690, f'Department: {employee.department}')
+    p.drawString(100, 670, f'Role ID: {employee.role}')
+
+    # Add more details as needed
+
+    # Close the PDF document
+    p.showPage()
+    p.save()
+    return response
+
+

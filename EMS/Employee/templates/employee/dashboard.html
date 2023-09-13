@@ -1,0 +1,184 @@
+{% extends 'employee/employee_base_dashboard.html' %} {% block title %}Employee
+Dashboard{%endblock %} {% block content %}
+<div id="layoutSidenav">
+  <div id="layoutSidenav_nav">
+    <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+      <div class="sb-sidenav-menu">
+        <div class="nav">
+          <div class="sb-sidenav-menu-heading">Core</div>
+          <a class="nav-link" href="{% url 'employee_dashboard' %}">
+            <div class="sb-nav-link-icon">
+              <i class="fas fa-tachometer-alt"></i>
+            </div>
+            Menu
+          </a>
+          <div class="sb-sidenav-menu-heading">Interface</div>
+          <a class="nav-link" href="{% url 'create_leave_request' %}">
+            <div class="sb-nav-link-icon">
+              <i class="fas fa-chart-area"></i>
+            </div>
+            Leave Requests
+          </a>
+          <a class="nav-link" href="{% url 'report_time' %}">
+            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+            Report time
+          </a>
+
+          <div class="sb-sidenav-menu-heading">Reports</div>
+          <a
+            class="nav-link"
+            href="{% url 'leave_request_list' user_id=user_id %}"
+          >
+            <div class="sb-nav-link-icon">
+              <i class="fas fa-chart-area"></i>
+            </div>
+            Leave Requests
+          </a>
+          <a
+            class="nav-link"
+            href="{% url 'time_record_list' user_id=user_id  %}"
+          >
+            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+            Attendance
+          </a>
+        </div>
+      </div>
+      <div class="sb-sidenav-footer">
+        <div class="small">Logged in as:</div>
+        {{request.user}}
+      </div>
+    </nav>
+  </div>
+  <div id="layoutSidenav_content">
+    {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+      <li class="alert alert-{{ message.tags }} alert-dismissible fade show">
+        {{ message }}
+        <button
+          type="button"
+          class="close"
+          data-dismiss="alert"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    <main>
+      <div class="container-fluid px-4">
+        <h1 class="mt-4">Employee Dashboard</h1>
+        <ol class="breadcrumb mb-4">
+          <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
+        <div class="row">
+          <div class="col-xl-3 col-md-6">
+            <div class="card bg-success text-white mb-4">
+              <div class="card-body">Recent personal Attendance</div>
+              <div
+                class="card-footer d-flex align-items-center justify-content-between"
+              >
+                <a
+                  class="small text-white stretched-link"
+                  href="{% url 'attendance_dashboard' user_id=user_id %}"
+                  >View Attendances</a
+                >
+
+                <div class="small text-white">
+                  <i class="fas fa-angle-right"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-3 col-md-6">
+            <div class="card bg-danger text-white mb-4">
+              <div class="card-body">Recent Leave Requests</div>
+              <div
+                class="card-footer d-flex align-items-center justify-content-between"
+              >
+                <a
+                  class="small text-white stretched-link"
+                  href="{% url 'leave_request_dashboard' user_id=user_id %}"
+                  >View Leave requests</a
+                >
+                <div class="small text-white">
+                  <i class="fas fa-angle-right"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card mb-4">
+        <div class="card-header">
+          <i class="fas fa-table me-1"></i>
+          Records
+        </div>
+        <div class="card-body">
+          {% block item_body %}
+
+          <div class="container">
+            <h2 class="mb-2">
+              {% block item_title %} Recent Attendance Records{% endblock %}
+            </h2>
+            <div class="table-container">
+              <div class="table-responsive">
+                {% block table %}
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Employee</th>
+                      <th>Clock-in</th>
+                      <th>Clock-out</th>
+                      <th>Approved</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for attendance in attendances %}
+                    <tr>
+                      <td>{{ attendance.employee }}</td>
+                      <td>{{ attendance.clock_in }}</td>
+                      <td>{{ attendance.clock_out }}</td>
+                      <td>
+                        {% if attendance.is_approved %}Yes{% else %}No{% endif%}
+                      </td>
+                      {% if attendance.is_approved %}
+                      <td>
+                        <a
+                          href="{% url 'clock_out' pk=attendance.pk %}"
+                          class="btn btn-primary btn-sm"
+                          >Clock_out</a
+                        >
+                      </td>
+                      {% endif %}
+                    </tr>
+                    {% empty %}
+                    <td colspan="4">No records found</td>
+                    {% endfor %}
+                  </tbody>
+                </table>
+                {% endblock %}
+              </div>
+            </div>
+          </div>
+          {% endblock %}
+        </div>
+      </div>
+    </main>
+    <footer class="py-4 bg-light mt-auto">
+      <div class="container-fluid px-4">
+        <div class="d-flex align-items-center justify-content-between small">
+          <div class="text-muted">Copyright &copy; Employee System 2023</div>
+          <div>
+            <a href="#">Privacy Policy</a>
+            &middot;
+            <a href="#">Terms &amp; Conditions</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+{% endblock %}

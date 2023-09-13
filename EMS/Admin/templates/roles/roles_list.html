@@ -1,0 +1,54 @@
+{% extends 'admin/dashboard.html' %} {% block content1 %}
+<div class="m-4" style="float: left">
+  <a href="{% url 'create_role' %}" class="btn btn-primary"> + Add Role</a>
+</div>
+
+<div class="card m-4">
+  <div class="card-header">
+    <i class="fas fa-table me-1"></i>
+    Records
+  </div>
+  <div class="card-body">
+    <div class="container">
+      <h2 class="mb-2">Role List</h2>
+      <div class="table-container">
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Department</th>
+                <th>Role Name</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for role in roles %}
+              <tr>
+                <td>{{ role.department }}</td>
+                <td>{{ role.roles_name }}</td>
+                <td>
+                  <a
+                    href="{% url 'edit_role' role.id %}"
+                    class="btn btn-sm btn-info"
+                    >Edit</a
+                  >
+                  <a
+                    href="{% url 'delete_role' role.id %}"
+                    class="btn btn-sm btn-danger"
+                    >Delete</a
+                  >
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="3">No roles found.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+from django.db import models
+
+class Department(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+
+class Employee(models.Model):
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    email = models.EmailField(unique=True)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE)
+    hire_date = models.DateField()
+
+class Token(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    token = models.CharField(max_length=100)
+    creation_time = models.DateTimeField(auto_now_add=True)
+    is_verified = models.BooleanField(default=False)
+
+class ReportingLog(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    token = models.ForeignKey(Token, on_delete=models.CASCADE)
+    verification_time = models.DateTimeField()
+    admin = models.ForeignKey('Admin', on_delete=models.SET_NULL, null=True)
+
+class Admin(models.Model):
+    username = models.CharField(max_length=100, unique=True)
+    password = models.CharField(max_length=100)  # Store encrypted password
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+class Token(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    token = models.CharField(max_length=100)
+    creation_time = models.DateTimeField(auto_now_add=True)
+    is_verified = models.BooleanField(default=False)
+    verified_time = models.DateTimeField(null=True)
+    verified_by = models.ForeignKey(Admin, on_delete=models.SET_NULL, null=True)
+

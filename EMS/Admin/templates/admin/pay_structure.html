@@ -1,0 +1,13 @@
+{% extends 'admin/dashboard.html' %} 
+
+{% block content1 %}
+<h1>Pay Structure</h1>
+<ul>
+    {% for employee in employees %}
+    <li>
+        {{ employee.first_name }} {{ employee.last_name }} - Salary: {{ employee.salary }} | Hourly Rate: {{ employee.hourly_rate }}
+        <a href="{% url 'payment_records' employee.id %}" class="btn btn-info btn-sm">Payment Records</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

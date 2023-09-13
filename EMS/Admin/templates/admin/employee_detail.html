@@ -1,0 +1,35 @@
+{% extends 'admin/dashboard.html' %} 
+
+{% block content1 %}
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header">
+      <h1 class="card-title">Employee Detail</h1>
+    </div>
+    <div class="card-body">
+      <dl class="row">
+        <dt class="col-sm-3">First Name:</dt>
+        <dd class="col-sm-9">{{ employee.first_name }}</dd>
+
+        <dt class="col-sm-3">Last Name:</dt>
+        <dd class="col-sm-9">{{ employee.last_name }}</dd>
+
+        <dt class="col-sm-3">Contact Details:</dt>
+        <dd class="col-sm-9">{{ employee.contact }}</dd>
+
+        <dt class="col-sm-3">Department:</dt>
+        <dd class="col-sm-9">{{ employee.department }}</dd>
+
+        <dt class="col-sm-3">Role:</dt>
+        <dd class="col-sm-9">{{ employee.role }}</dd>
+
+        <dt class="col-sm-3">Salary:</dt>
+        <dd class="col-sm-9">{{ employee.salary }}</dd>
+      </dl>
+    </div>
+    <div class="card-footer">
+      <a href="{% url 'employee_list' %}" class="btn btn-secondary">Back to List</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

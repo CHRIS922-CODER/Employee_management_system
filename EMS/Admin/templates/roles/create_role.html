@@ -1,0 +1,42 @@
+{% extends 'admin/dashboard.html' %} {% block content1 %}
+<main>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-7">
+        <div class="card shadow-lg border-0 rounded-lg mt-5">
+          <div class="card-header">
+            <h3 class="text-center font-weight-light my-4">Create Role</h3>
+          </div>
+          <div class="card-body">
+            <form method="post">
+              {% csrf_token %}
+
+              <div class="form-floating mb-3 mb-md-0">
+                <div class="mb-1">
+                  <label for="name">Department </label>
+                </div>
+                {{form.department}}
+              </div>
+              <div class="form-floating mb-3 mt-3 mb-md-0">
+                <input
+                  class="form-control"
+                  id="name"
+                  type="text"
+                  placeholder="Enter role"
+                />
+                <label for="name">Role name</label>
+              </div>
+              <div class="card-footer text-center py-3">
+                <button type="submit" class="btn btn-primary">Create</button>
+                <a href="{% url 'roles_list' %}" class="btn btn-secondary"
+                  >Cancel</a
+                >
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}

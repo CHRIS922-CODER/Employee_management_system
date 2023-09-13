@@ -1,0 +1,16 @@
+{% extends 'admin/dashboard.html' %} 
+
+{% block content1 %}
+<h1>Payment Records for {{ employee.first_name }} {{ employee.last_name }}</h1>
+<ul>
+    {% for record in payment_records %}
+    <li>
+        Payment Date: {{ record.payment_date }} | Amount: {{ record.amount }}
+        <br>
+        Notes: {{ record.notes }}
+    </li>
+    {% endfor %}
+</ul>
+<a href="{% url 'record_payment' %}" class="btn btn-primary">Record Payment</a>
+{% endblock %}
+

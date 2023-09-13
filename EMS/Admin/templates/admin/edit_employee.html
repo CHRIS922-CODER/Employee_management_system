@@ -1,0 +1,23 @@
+{% extends 'admin/dashboard.html' %} 
+
+{% block content1 %}
+  <div class="container">
+    <h2>Edit Employee details</h2>
+    <form method="POST" action="">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="id_name">First name:</label>
+        {{ form.Fname }}
+      </div>
+      <div class="form-group">
+        <label for="id_name">contact details:</label>
+        {{ form.contact }}
+      </div>
+      <div>
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a href="{% url 'product_list' %}" class="btn btn-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}
+

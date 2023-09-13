@@ -1,0 +1,12 @@
+<!-- leave_request_detail.html -->
+{% extends 'employee/dashboard_test.html' %}
+{% block content1 %}
+
+<h1>Leave Request Detail</h1>
+<p><strong>Employee:</strong> {{ leave_request.employee }}</p>
+<p><strong>Start Date:</strong> {{ leave_request.start_date }}</p>
+<p><strong>End Date:</strong> {{ leave_request.end_date }}</p>
+<p><strong>Status:</strong> {{ leave_request.status }}</p>
+<p><strong>Notes:</strong> <a href="{{ leave_request.notes.url }}" target="_blank">Download Notes</a></p>
+<a href="{% url 'leave_request_list' %}">Back to Leave Requests</a>
+{% endblock %}

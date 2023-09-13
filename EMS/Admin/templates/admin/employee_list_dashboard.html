@@ -1,0 +1,53 @@
+{% extends 'admin/dashboard_test.html' %}
+
+{% block item_body %}
+
+{% block item_title %} Recent signed In Employee {% endblock %}
+{% block table %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Contact Details</th>
+            <th>Department</th>
+            <th>Role</th>
+            <th>salary</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for employee in employees %}
+        <tr>
+            <td>{{ employee.first_name }}</td>
+            <td>{{ employee.last_name }}</td>
+            <td>{{ employee.contact_details }}</td>
+            <td>{{ employee.department }}</td>
+            <td>{{ employee.role }}</td>
+            <td>{{ employee.salary }}</td>
+            <td>
+                <a href="{% url 'employee_detail' employee.pk %}" class="btn btn-info btn-sm">Detail</a>
+                <a href="{% url 'employee_update' employee.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                <a href="{% url 'employee_delete' employee.pk %}" class="btn btn-danger btn-sm">Delete</a>
+                    {% if not employee.user %}
+                    <a
+                      href="{% url 'create_employee_user' pk=employee.pk %}"
+                      class="btn btn-primary btn-sm"
+                      >Create Account</a
+                    >
+                    {% else %}
+                    <button class="btn btn-secondary btn-sm" disabled>
+                      Account  Created
+                    </button>
+                    {% endif %}
+            </td>
+    {% empty %}
+    <td colspan="8">No records found</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
+
+{% endblock %}

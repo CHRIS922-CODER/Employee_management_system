@@ -1,0 +1,246 @@
+from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
+from django.urls import path
+
+urlpatterns = [
+    # Password Reset
+    path('password_reset/', PasswordResetView.as_view(), name='password_reset'),
+    path('password_reset/done/', PasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('reset/done/', PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+]
+
+
+from django.contrib import admin
+from django.urls import include, path
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('accounts/', include('django.contrib.auth.urls')),  # Include authentication URLs
+    # Add your other app URLs here
+]
+
+
+By including 'django.contrib.auth.urls', you're including Django's built-in authentication views, including the password reset views you defined earlier.
+
+
+Templates (Optional):
+
+Ensure that you have the necessary HTML templates in place for the password reset views.
+ Django's built-in views use templates with specific names, so you should have templates named like registration/password_reset_form.html, registration/password_reset_done.html, registration/password_reset_confirm.html, and registration/password_reset_complete.html. Customize these templates according to your project's styling and requirements.
+
+Email Configuration (Optional):
+
+To send email notifications for password reset requests, configure your email settings in Django's settings.py file.
+ You'll need to specify the SMTP server, port, email account credentials, and other email-related settings.
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'your-smtp-server.com'
+EMAIL_PORT = 587  # Example port for SMTP
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'your-email@example.com'
+EMAIL_HOST_PASSWORD = 'your-email-password'
+
+
+With these steps, your Django project should have the necessary views and URLs to handle forgotten passwords and reset requests.
+ Users can access the password reset functionality through the /accounts/password_reset/ URL, and Django will guide them through the process via the built-in views and templates.
+
+
+
+
+Sure, I can help you generate views and URLs for a CRUD application for the Department model and its related Role model. You'll need to create views for both creating and managing departments and roles. Here's how you can do it:
+
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Department, Role
+from .forms import DepartmentForm, RoleForm
+
+# Department Views
+def department_list(request):
+    departments = Department.objects.all()
+    return render(request, 'department/department_list.html', {'departments': departments})
+
+def department_detail(request, pk):
+    department = get_object_or_404(Department, pk=pk)
+    return render(request, 'department/department_detail.html', {'department': department})
+
+def department_create(request):
+    if request.method == 'POST':
+        form = DepartmentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('department_list')
+    else:
+        form = DepartmentForm()
+    return render(request, 'department/department_form.html', {'form': form})
+
+def department_update(request, pk):
+    department = get_object_or_404(Department, pk=pk)
+    if request.method == 'POST':
+        form = DepartmentForm(request.POST, instance=department)
+        if form.is_valid():
+            form.save()
+            return redirect('department_list')
+    else:
+        form = DepartmentForm(instance=department)
+    return render(request, 'department/department_form.html', {'form': form})
+
+def department_delete(request, pk):
+    department = get_object_or_404(Department, pk=pk)
+    if request.method == 'POST':
+        department.delete()
+        return redirect('department_list')
+    return render(request, 'department/department_confirm_delete.html', {'department': department})
+
+# Role Views
+def role_list(request, department_id):
+    department = get_object_or_404(Department, pk=department_id)
+    roles = department.role_set.all()
+    return render(request, 'department/role_list.html', {'department': department, 'roles': roles})
+
+def role_detail(request, department_id, role_id):
+    department = get_object_or_404(Department, pk=department_id)
+    role = get_object_or_404(Role, pk=role_id, department=department)
+    return render(request, 'department/role_detail.html', {'department': department, 'role': role})
+
+def role_create(request, department_id):
+    department = get_object_or_404(Department, pk=department_id)
+    if request.method == 'POST':
+        form = RoleForm(request.POST)
+        if form.is_valid():
+            role = form.save(commit=False)
+            role.department = department
+            role.save()
+            return redirect('role_list', department_id=department_id)
+    else:
+        form = RoleForm()
+    return render(request, 'department/role_form.html', {'department': department, 'form': form})
+
+def role_update(request, department_id, role_id):
+    department = get_object_or_404(Department, pk=department_id)
+    role = get_object_or_404(Role, pk=role_id, department=department)
+    if request.method == 'POST':
+        form = RoleForm(request.POST, instance=role)
+        if form.is_valid():
+            form.save()
+            return redirect('role_list', department_id=department_id)
+    else:
+        form = RoleForm(instance=role)
+    return render(request, 'department/role_form.html', {'department': department, 'form': form})
+
+def role_delete(request, department_id, role_id):
+    department = get_object_or_404(Department, pk=department_id)
+    role = get_object_or_404(Role, pk=role_id, department=department)
+    if request.method == 'POST':
+        role.delete()
+        return redirect('role_list', department_id=department_id)
+    return render(request, 'department/role_confirm_delete.html', {'department': department, 'role': role})
+
+
+
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    # Department URLs
+    path('departments/', views.department_list, name='department_list'),
+    path('department/<int:pk>/', views.department_detail, name='department_detail'),
+    path('department/create/', views.department_create, name='department_create'),
+    path('department/<int:pk>/update/', views.department_update, name='department_update'),
+    path('department/<int:pk>/delete/', views.department_delete, name='department_delete'),
+    
+    # Role URLs
+    path('department/<int:department_id>/roles/', views.role_list, name='role_list'),
+    path('department/<int:department_id>/role/<int:role_id>/', views.role_detail, name='role_detail'),
+    path('department/<int:department_id>/role/create/', views.role_create, name='role_create'),
+    path('department/<int:department_id>/role/<int:role_id>/update/', views.role_update, name='role_update'),
+    path('department/<int:department_id>/role/<int:role_id>/delete/', views.role_delete, name='role_delete'),
+]
+
+
+
+
+Implementing a notification system in Django involves several components, including a Notification model, views for generating and managing notifications, templates for displaying notifications, and logic for handling notifications. Here's a step-by-step guide with code and comments for each section:
+
+from django.db import models
+from django.contrib.auth.models import User
+from django.utils import timezone
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    message = models.TextField()
+    timestamp = models.DateTimeField(default=timezone.now)
+    is_read = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.message
+
+
+
+Views for Generating and Managing Notifications (views.py):
+
+from django.shortcuts import render, redirect
+from .models import Notification
+
+def create_notification(user, message):
+    Notification.objects.create(user=user, message=message)
+
+def view_notifications(request):
+    user = request.user
+    notifications = user.notifications.all().order_by('-timestamp')
+    return render(request, 'notifications/view_notifications.html', {'notifications': notifications})
+
+def mark_notification_as_read(request, notification_id):
+    notification = Notification.objects.get(id=notification_id)
+    if notification.user == request.user:
+        notification.is_read = True
+        notification.save()
+    return redirect('view_notifications')
+
+
+create_notification: Function to create a new notification for a user.
+view_notifications: View to display a user's notifications.
+mark_notification_as_read: View to mark a notification as read.
+3. Templates for Notifications (view_notifications.html):
+
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Notifications</h1>
+  <ul>
+    {% for notification in notifications %}
+      <li{% if notification.is_read %} style="color: #999;"{% endif %}>
+        {{ notification.message }}
+        <small>{{ notification.timestamp }}</small>
+        {% if not notification.is_read %}
+          <a href="{% url 'mark_notification_as_read' notification.id %}">Mark as Read</a>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}
+
+
+4. URL Patterns (urls.py):
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('notifications/', views.view_notifications, name='view_notifications'),
+    path('notifications/mark_as_read/<int:notification_id>/', views.mark_notification_as_read, name='mark_notification_as_read'),
+]
+
+5. Notification Handling Logic:
+
+Whenever an event occurs that requires generating a notification (e.g., leave request approval), call the create_notification function to create a new notification for the user associated with that event.
+
+Here's an example of how to use create_notification:
+
+# Inside your views or wherever the event occurs
+create_notification(request.user, "Your leave request has been approved.")
+This code creates a notification for the logged-in user with the specified message.
+
+Note: You can integrate create_notification into various parts of your application where notifications are needed.
+
+With this setup, you have a basic notification system in Django that allows users to view and mark notifications as read. You can extend this system to include more complex features like real-time notifications using Django Channels, grouping notifications, or allowing users to subscribe/unsubscribe from certain types of notifications.

@@ -1,0 +1,113 @@
+{% extends 'admin/dashboard.html' %} {% block content1 %}
+<div class="m-4" style="float: left">
+  <a href="{% url 'employee_create' %}" class="btn btn-primary">
+    + Add Employee</a
+  >
+</div>
+
+<div class="card m-4">
+  <div class="card-header">
+    <i class="fas fa-table me-1"></i>
+    Records
+  </div>
+  <div class="card-body">
+    <div class="container">
+      <h2 class="mb-2">Employee List</h2>
+      <div class="m-2">
+        <form method="GET" action="{% url 'employee_list' %}">
+          <div class="input-group">
+            <input
+              class="form-control"
+              type="text"
+              placeholder="Search for..."
+              name="search"
+              aria-label="Search for..."
+              aria-describedby="btnNavbarSearch"
+              value="{{ request.GET.search }}"
+            />
+            <button class="btn btn-primary" type="submit">
+              <i class="fas fa-search"></i> Search
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="table-container">
+        <div class="table-responsive">
+          {% if search_query %}
+          <p>Search results for: <strong>{{ search_query }}</strong></p>
+          {% endif %}
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Contact Details</th>
+                <th>Department</th>
+                <th>Role</th>
+                <th>Salary</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if employees %} {% for employee in employees %}
+              <tr>
+                <td>{{ employee.first_name }}</td>
+                <td>{{ employee.last_name }}</td>
+                <td>{{ employee.contact }}</td>
+                <td>{{ employee.department }}</td>
+                <td>{{ employee.role }}</td>
+                <td>{{ employee.salary }}</td>
+                <td>
+                  <div class="btn-group">
+                    <a
+                      href="{% url 'employee_detail' employee.pk %}"
+                      class="btn btn-info btn-sm"
+                      >Detail</a
+                    >
+                    <a
+                      href="{% url 'employee_update' employee.pk %}"
+                      class="btn btn-warning btn-sm"
+                      >Edit</a
+                    >
+                    <a
+                      href="{% url 'employee_delete' employee.pk %}"
+                      class="btn btn-danger btn-sm"
+                      >Delete</a
+                    >
+                    {% if not employee.user %}
+                    <a
+                      href="{% url 'create_employee_user' pk=employee.pk %}"
+                      class="btn btn-primary btn-sm"
+                      >Create Account</a
+                    >
+                    {% else %}
+                    <a class="btn btn-secondary btn-sm" disabled>
+                      Account Created
+                    </a>
+                    {% endif %}
+                  </div>
+                </td>
+              </tr>
+              {% empty %}
+              <td colspan="8">No records found</td>
+              {% endfor %} {% else %}
+              <tr>
+                <td colspan="8">No records found.</td>
+              </tr>
+              {% endif %}
+            </tbody>
+          </table>
+          <div class="text-center">
+            <a
+              href="{% url 'generate_employee_report' %}"
+              class="btn btn-primary"
+              target="_blank"
+              >Export to PDF</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

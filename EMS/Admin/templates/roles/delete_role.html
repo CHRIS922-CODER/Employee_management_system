@@ -1,0 +1,13 @@
+{% extends 'admin/dashboard.html' %}
+
+{% block content1 %}
+    <div class="container mt-4">
+        <h2>Confirm Deletion</h2>
+        <p>Are you sure you want to delete the role "{{ role.roles_name }}"?</p>
+        <form method="post" class="mt-3">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Confirm Delete</button>
+        </form>
+        <a href="{% url 'roles_list' %}" class="btn btn-secondary mt-3">Cancel</a>
+    </div>
+{% endblock %}

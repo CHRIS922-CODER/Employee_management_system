@@ -1,0 +1,44 @@
+{% extends 'admin/dashboard_test.html' %}
+
+{% block item_body %} 
+
+{% block item_title %} Recent Attendance list{% endblock %}
+
+{% block table %}
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Employee</th>
+      <th>Clock-in</th>
+      <th>Clock-out</th>
+      <th>Approved</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for attendance in attendances %}
+    <tr>
+      <td>{{ attendance.user }}</td>
+      <td>{{ attendance.clock_in }}</td>
+      <td>{{ attendance.clock_out }}</td>
+      <td>{% if attendance.is_approved %}Yes{% else %}No{% endif %}</td>
+
+      <td>
+        {% if attendance.is_clock_in %}
+        <a
+          href="{% url 'approve_adjust' pk=attendance.pk %}"
+          class="btn btn-primary btn-sm"
+          >Approve</a
+        >
+        {% else %}
+        <a class="btn btn-secondary btn-sm">Approved</a>
+        {% endif %}
+      </td>
+    </tr>
+    {% empty %}
+    <td colspan="7">No records found</td>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %} 
+{% endblock %} 

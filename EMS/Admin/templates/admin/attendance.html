@@ -1,0 +1,48 @@
+{% extends 'admin/dashboard.html' %} {% block content1 %}
+
+<div class="card m-4">
+  <div class="card-header">
+    <i class="fas fa-table me-1"></i>
+    Records
+  </div>
+  <div class="card-body">
+    <div class="container">
+      <h2 class="mb-2">Attendance List</h2>
+      <div class="table-container">
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Employee</th>
+                <th>Clock-in</th>
+                <th>Clock-out</th>
+                <th>Approved by</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for attendance in attendances %}
+              <tr>
+                <td>{{ attendance.user }}</td>
+                <td>{{ attendance.clock_in }}</td>
+                <td>{{ attendance.clock_out }}</td>
+                <td>{{ attendance.approved_by }}</td>
+              </tr>
+              {% empty %}
+              <td colspan="7">No records found</td>
+              {% endfor %}
+            </tbody>
+          </table>
+          <div class="text-center">
+            <a
+              href="{% url 'generate_time_record_report' %}"
+              class="btn btn-primary"
+              target="_blank"
+              >Export to PDF</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

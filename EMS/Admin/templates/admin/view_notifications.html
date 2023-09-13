@@ -1,0 +1,14 @@
+{% extends 'admin/dashboard.html' %} 
+
+{% block content1 %}
+<div class="row">
+    <div class="col-md-8">
+        <h1>Notifications</h1>
+        <ul class="list-group">
+            {% for notification in notifications %}
+            <li class="list-group-item">{{ notification.content }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'admin/dashboard.html' %} 
+
+{% block content1 %}
+<div class="row">
+    <div class="col-md-6">
+        <h1>Approve Leave Request</h1>
+        <form method="post">
+            {% csrf_token %}
+            <label for="status">Status:</label>
+            <select class="form-control" name="status">
+                <option value="Approved">Approve</option>
+                <option value="Rejected">Reject</option>
+            </select>
+            <button type="submit" class="btn btn-primary mt-3">Submit</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

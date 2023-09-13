@@ -1,0 +1,26 @@
+<!-- view_profile.html -->
+{% extends 'employee/dashboard_test.html' %}
+{% block content1 %}
+<div class="container">
+  <h1 class="mt-4">Employee Profile</h1>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Personal Information</h5>
+          <p class="card-text"><strong>Name:</strong> {{ employee.first_name }} {{ employee.last_name }}</p>
+          <!-- Display the profile image -->
+          {% if employee.profile_image %}
+          <img src="{{ employee.profile_images.url }}" alt="{{ employee.user.username }}'s Profile Image" class="img-fluid">
+          {% else %}
+          <p>No profile image available.</p>
+          {% endif %}
+          <!-- Add other profile fields as needed -->
+          <a href="{% url 'edit_employee_profile' user_id=employee.user_id %}" class="btn btn-primary">Edit Profile</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Rest of the template... -->
+</div>
+{% endblock %}

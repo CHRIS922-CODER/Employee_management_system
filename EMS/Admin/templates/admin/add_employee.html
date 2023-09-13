@@ -1,0 +1,78 @@
+{% extends 'admin/dashboard.html' %} {% block content1 %} {
+<main>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-7">
+        <div class="card shadow-lg border-0 rounded-lg mt-5">
+          <div class="card-header">
+            <h3 class="text-center font-weight-light my-4">Add Employee</h3>
+          </div>
+          <div class="card-body">
+            <form method="POST" action="">
+              {% csrf_token %}
+                <label for="first_name">First name:</label>
+                <div class="form-floating mb-3 mb-md-0">
+                  <input
+                    class="form-control"
+                    id="first_name"
+                    type="text"
+                    name="first_name"
+                    placeholder="Enter your department"
+                    required
+                  />
+                </div>
+              
+              <div class="form-floating mb-3 mb-md-0">
+                <label for="last_name">Last name</label>
+                <input
+                  class="form-control"
+                  id="last_name"
+                  type="text"
+                  name="last_name"
+                  placeholder="Enter your last name"
+                  required
+                />
+
+              </div>
+
+              <div class="form-floating mb-3 mb-md-0">
+                <label for="email">Email</label>
+                <input
+                  class="form-control"
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  required
+                />
+
+              </div>
+              <div class="form-floating mb-3 mb-md-0">
+                <label for="contact">Contact</label>
+                <input
+                  class="form-control"
+                  id="contact"
+                  type="text"
+                  name="contact"
+                  placeholder="Enter your contact"
+                  required
+                />
+
+              </div>
+
+
+              <div class="card-footer text-center py-3">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a href="{% url 'settings' %}" class="btn btn-secondary"
+                  >Cancel</a
+                >
+              </div>
+            </form>
+
+            {% endblock %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

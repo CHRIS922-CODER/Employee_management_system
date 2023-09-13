@@ -1,0 +1,23 @@
+{% extends 'admin/dashboard.html' %} 
+
+{% block content1 %}
+
+<div class="sidebar bg-light">
+    <form method="post" action="">
+        {% csrf_token %}
+        
+        <h1 class="display-4">Are you sure you want to delete?</h1>
+        <hr class="my-4">
+        
+        <div class="alert alert-warning" role="alert">
+            <p class="lead">This action cannot be undone.</p>
+        </div>
+        
+        <div class="text-center">
+            <button class="btn btn-danger btn-lg" type="submit">Yes</button>
+            <a href="{% url 'employee_list' %}" class="btn btn-primary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
